@@ -1,6 +1,9 @@
-# BizFE
+# BelfastEats_Frontend
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.0.
+
+## 🔗 Related Repositories
+- Backend API: https://github.com/CalumMan/belfastEats_backend
 
 ## Development server
 
