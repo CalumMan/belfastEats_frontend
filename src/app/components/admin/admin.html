@@ -1,0 +1,13 @@
+<div class="container mt-5">
+  <h3>Admin Panel</h3>
+  <p *ngIf="!auth.isAdmin()" class="text-danger">
+    Admin access required. Please log in with an admin account.
+  </p>
+  <p *ngIf="auth.isAdmin()" class="text-muted">
+    Use the links below for admin tooling:
+  </p>
+  <ul *ngIf="auth.isAdmin()">
+    <li><a [routerLink]="['/admin/businesses']">Manage businesses</a></li>
+    <li><a [routerLink]="['/admin/users']">Manage users (debug)</a></li>
+  </ul>
+</div>

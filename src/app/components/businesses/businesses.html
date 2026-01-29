@@ -1,0 +1,129 @@
+<div class="container" style="margin-top: 70px">
+  <div class="row">
+    <div class="col-sm-12">
+
+      <!-- Search -->
+      <input
+        type="text"
+        class="form-control mb-3"
+        placeholder="Search by name, address, or postcode..."
+        [(ngModel)]="searchTerm"
+        (input)="applyFilters()"
+      />
+      <span
+        class="badge"
+        [ngClass]="{
+          'bg-success': dataSource === 'api',
+          'bg-secondary': dataSource === 'json'
+        }"
+      >
+        {{ dataSource === 'api' ? 'Live API' : dataSource === 'json' ? 'Local JSON' : 'Loading' }}
+      </span>
+
+      <!-- Filters row -->
+      <div class="row mb-3 justify-content-center filter-row g-3 align-items-center">
+        <!-- Minimum rating -->
+        <div class="col-sm-6 col-lg-5 filter-col">
+          <label class="form-label">Minimum hygiene rating</label>
+          <select
+            class="form-select"
+            [(ngModel)]="minRating"
+            (change)="applyFilters()"
+          >
+            <option [ngValue]="0">All ratings</option>
+            <option [ngValue]="1">1 star+</option>
+            <option [ngValue]="2">2 stars+</option>
+            <option [ngValue]="3">3 stars+</option>
+            <option [ngValue]="4">4 stars+</option>
+            <option [ngValue]="5">5 stars only</option>
+          </select>
+        </div>
+
+        <!-- Sort -->
+        <div class="col-sm-6 col-lg-5 filter-col">
+          <label class="form-label">Sort by</label>
+          <select
+            class="form-select"
+            [(ngModel)]="sortOption"
+            (change)="applyFilters()"
+          >
+            <option value="name-asc">Name A -> Z</option>
+            <option value="name-desc">Name Z -> A</option>
+            <option value="rating-desc">Highest rating</option>
+            <option value="rating-asc">Lowest rating</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- BUSINESS GRID -->
+      <div class="row g-3">
+        <div class="col-12 col-md-4 col-lg-2" *ngFor="let business of business_page; trackBy: trackById">
+          <div
+            class="card text-white bg-primary h-100 business-card"
+            [routerLink]="['/businesses', business._id]"
+            style="cursor: pointer"
+          >
+            <div class="biz-thumb d-flex align-items-center justify-content-center">
+              <span class="biz-emoji">{{ cuisineInfo(business).emoji }}</span>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title mb-1">
+                {{ business?.name || business?._id || 'Unnamed business' }}
+              </h5>
+              <div class="text-muted small mb-1">
+                {{ business?.address || 'Unknown address' }},
+                {{ business?.postcode || 'Unknown postcode' }}
+              </div>
+              <div class="text-muted small mb-2">
+                Cuisine: {{ business?.cuisine || 'Unknown' }}
+              </div>
+              <div class="mb-2">
+                {{ cuisineInfo(business).desc }}
+              </div>
+              <div class="text-muted small" *ngIf="business?.tags?.length">
+                Tags: {{ (business.tags || []).join(', ') }}
+              </div>
+            </div>
+            <div class="card-footer footer-vertical">
+              <div class="rating-text">Hygiene rating: {{ business?.hygiene_rating ?? 'N/A' }}</div>
+              <div class="stars">
+                <span *ngFor="let star of ratingStars(business)" class="me-1">
+                  <img src="images/star.png" class="star-icon" />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- PAGINATION -->
+      <div class="row mt-3">
+        <div class="col-sm-4">
+          <button
+            class="btn btn-primary"
+            (click)="previousPage()"
+            [disabled]="page === 1"
+          >
+            Previous
+          </button>
+        </div>
+
+        <div class="col-sm-4 text-center align-self-center">
+          Showing page {{ page }} of {{ totalPages }}
+        </div>
+
+        <div class="col-sm-4 text-end">
+          <button
+            class="btn btn-primary"
+            (click)="nextPage()"
+            [disabled]="page === totalPages"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

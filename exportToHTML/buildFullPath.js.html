@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>buildFullPath.js</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #6aab73;}
+.s1 { color: #bcbec4;}
+.s2 { color: #7a7e85;}
+.s3 { color: #cf8e6d;}
+.ln { color: #4b5059; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+buildFullPath.js</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">'use strict'</span><span class="s1">;</span>
+<a name="l2"><span class="ln">2    </span></a>
+<a name="l3"><span class="ln">3    </span></a><span class="s1">import isAbsoluteURL from </span><span class="s0">'../helpers/isAbsoluteURL.js'</span><span class="s1">;</span>
+<a name="l4"><span class="ln">4    </span></a><span class="s1">import combineURLs from </span><span class="s0">'../helpers/combineURLs.js'</span><span class="s1">;</span>
+<a name="l5"><span class="ln">5    </span></a>
+<a name="l6"><span class="ln">6    </span></a><span class="s2">/** 
+<a name="l7"><span class="ln">7    </span></a> * Creates a new URL by combining the baseURL with the requestedURL, 
+<a name="l8"><span class="ln">8    </span></a> * only when the requestedURL is not already an absolute URL. 
+<a name="l9"><span class="ln">9    </span></a> * If the requestURL is absolute, this function returns the requestedURL untouched. 
+<a name="l10"><span class="ln">10   </span></a> * 
+<a name="l11"><span class="ln">11   </span></a> * @param {string} baseURL The base URL 
+<a name="l12"><span class="ln">12   </span></a> * @param {string} requestedURL Absolute or relative URL to combine 
+<a name="l13"><span class="ln">13   </span></a> * 
+<a name="l14"><span class="ln">14   </span></a> * @returns {string} The combined full path 
+<a name="l15"><span class="ln">15   </span></a> */</span>
+<a name="l16"><span class="ln">16   </span></a><span class="s1">export </span><span class="s3">default function </span><span class="s1">buildFullPath(baseURL, requestedURL, allowAbsoluteUrls) {</span>
+<a name="l17"><span class="ln">17   </span></a>  <span class="s1">let isRelativeUrl = !isAbsoluteURL(requestedURL);</span>
+<a name="l18"><span class="ln">18   </span></a>  <span class="s3">if </span><span class="s1">(baseURL &amp;&amp; (isRelativeUrl || allowAbsoluteUrls == </span><span class="s3">false</span><span class="s1">)) {</span>
+<a name="l19"><span class="ln">19   </span></a>    <span class="s3">return </span><span class="s1">combineURLs(baseURL, requestedURL);</span>
+<a name="l20"><span class="ln">20   </span></a>  <span class="s1">}</span>
+<a name="l21"><span class="ln">21   </span></a>  <span class="s3">return </span><span class="s1">requestedURL;</span>
+<a name="l22"><span class="ln">22   </span></a><span class="s1">}</span>
+<a name="l23"><span class="ln">23   </span></a></pre>
+</body>
+</html>

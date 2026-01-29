@@ -1,0 +1,149 @@
+<div class="container mt-4">
+  <h2>Admin Dashboard</h2>
+  <h4 class="mt-2">Admin Dashboard</h4>
+
+  <div *ngIf="error" class="alert alert-danger mt-2">{{ error }}</div>
+  <div *ngIf="success" class="alert alert-success mt-2">{{ success }}</div>
+
+  <div class="row mt-3" *ngIf="stats">
+    <div class="col-md-4">
+      <div class="card text-bg-light mb-3">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">Restaurants</h6>
+          <div class="display-6">{{ stats.restaurants_count }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-bg-light mb-3">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">Average rating</h6>
+          <div class="display-6">
+            {{ stats.average_rating !== null ? stats.average_rating : 'N/A' }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-bg-light mb-3">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">Reviews</h6>
+          <div class="display-6">{{ stats.reviews_count }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="statsLoading" class="text-muted mt-2">Loading statistics...</div>
+  <div *ngIf="statsError" class="alert alert-danger mt-2">{{ statsError }}</div>
+
+  <div class="card mt-3">
+    <div class="card-body">
+      <h5 class="card-title">Create Business</h5>
+      <form [formGroup]="createForm" (ngSubmit)="submitCreate()">
+        <div class="row g-2">
+          <div class="col-md-4">
+            <label class="form-label">Name</label>
+            <input class="form-control" formControlName="name" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Address</label>
+            <input class="form-control" formControlName="address" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Postcode</label>
+            <input class="form-control" formControlName="postcode" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Hygiene rating</label>
+            <input type="number" class="form-control" formControlName="hygiene_rating" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Cuisine</label>
+            <input class="form-control" formControlName="cuisine" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Tags (comma separated)</label>
+            <input class="form-control" formControlName="tags" />
+          </div>
+          <div class="col-md-1">
+            <label class="form-label">Lat</label>
+            <input class="form-control" formControlName="lat" />
+          </div>
+          <div class="col-md-1">
+            <label class="form-label">Lng</label>
+            <input class="form-control" formControlName="lng" />
+          </div>
+        </div>
+        <button class="btn btn-primary mt-3" type="submit" [disabled]="submitting">
+          Create
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="mt-4" *ngIf="loading">Loading businesses...</div>
+
+  <div class="list-group mt-3" *ngIf="!loading">
+    <div
+      class="list-group-item"
+      *ngFor="let biz of businesses"
+    >
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <div class="fw-bold">{{ biz.name }}</div>
+          <div class="text-muted small">{{ biz.address }}, {{ biz.postcode }}</div>
+          <div class="text-muted small">Rating: {{ biz.hygiene_rating ?? 'N/A' }} • Cuisine: {{ biz.cuisine }}</div>
+          <div class="text-muted small" *ngIf="biz.tags?.length">Tags: {{ biz.tags.join(', ') }}</div>
+        </div>
+        <div class="ms-3">
+          <button class="btn btn-sm btn-outline-primary me-2" (click)="startEdit(biz)">Edit</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="deleteBusiness(biz._id)" [disabled]="submitting">Delete</button>
+        </div>
+      </div>
+
+      <div *ngIf="editingId === biz._id" class="mt-3">
+        <form [formGroup]="editForm" (ngSubmit)="submitEdit()">
+          <div class="row g-2">
+            <div class="col-md-4">
+              <label class="form-label">Name</label>
+              <input class="form-control" formControlName="name" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Address</label>
+              <input class="form-control" formControlName="address" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Postcode</label>
+              <input class="form-control" formControlName="postcode" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Hygiene rating</label>
+              <input type="number" class="form-control" formControlName="hygiene_rating" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Cuisine</label>
+              <input class="form-control" formControlName="cuisine" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Tags (comma separated)</label>
+              <input class="form-control" formControlName="tags" />
+            </div>
+            <div class="col-md-1">
+              <label class="form-label">Lat</label>
+              <input class="form-control" formControlName="lat" />
+            </div>
+            <div class="col-md-1">
+              <label class="form-label">Lng</label>
+              <input class="form-control" formControlName="lng" />
+            </div>
+          </div>
+          <div class="mt-3">
+            <button class="btn btn-primary me-2" type="submit" [disabled]="submitting">Save</button>
+            <button class="btn btn-secondary" type="button" (click)="cancelEdit()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

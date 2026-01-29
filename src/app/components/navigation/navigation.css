@@ -1,0 +1,4 @@
+/* align dropdown away from far right edge */
+.navbar .dropdown-menu-end.show {
+  transform: translate(-24px, 0);
+}

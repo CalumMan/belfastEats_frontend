@@ -1,0 +1,39 @@
+<div class="container" style="margin-top: 70px">
+  <h3>Favourites</h3>
+
+  <div *ngIf="auth.isAdmin()" class="text-muted">
+    Admins cannot manage favourites.
+  </div>
+
+  <div *ngIf="!auth.isLoggedIn()" class="text-muted">
+    Please log in to view your favourites.
+  </div>
+
+  <div *ngIf="auth.isLoggedIn() && !auth.isAdmin()">
+    <div *ngIf="!favs.length" class="text-muted">
+      You have no favourites yet.
+    </div>
+
+    <div class="row g-3" *ngIf="favs.length">
+      <div class="col-12 col-md-6 col-lg-4" *ngFor="let fav of favs">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ fav.name }}</h5>
+            <div class="text-muted small mb-1">
+              {{ fav.address || 'Address unknown' }} {{ fav.postcode || '' }}
+            </div>
+            <div class="text-muted small mb-2">
+              Hygiene rating: {{ fav.hygiene_rating ?? 'N/A' }}
+            </div>
+            <a [routerLink]="['/businesses', fav.id]" class="btn btn-sm btn-primary me-2">
+              View business
+            </a>
+            <button class="btn btn-sm btn-outline-danger" (click)="remove(fav.id)">
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

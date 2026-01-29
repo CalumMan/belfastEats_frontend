@@ -1,0 +1,22 @@
+:host{
+    display: block;
+    margin-top: 90px; 
+}
+
+.map-wrapper google-map {
+    display: block;
+    min-height: 400px;
+    width: 100%;
+}
+
+.map-canvas {
+    min-height: 400px;
+    width: 100%;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.review-card .review-stars {
+    color: #f9c74f;
+    letter-spacing: 2px;
+}

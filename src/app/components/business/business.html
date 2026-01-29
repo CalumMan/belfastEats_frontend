@@ -1,0 +1,163 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+
+      <!-- BUSINESS CARD -->
+      <ng-container *ngIf="business_list.length">
+        <div
+          class="card text-white bg-primary mb-3"
+          style="cursor: pointer"
+          *ngFor="let business of business_list; trackBy: trackById"
+        >
+          <div class="card-header">
+            <div class="d-flex align-items-center justify-content-between">
+              <span>{{ business?.name || business?._id || 'Unnamed business' }}</span>
+              <button
+                *ngIf="auth.isLoggedIn() && !auth.isAdmin()"
+                class="btn btn-sm btn-light"
+                type="button"
+                (click)="addFavorite()"
+                [disabled]="isFavorite"
+              >
+                <span [class.text-danger]="isFavorite">♥</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card-body">
+            This business is based at
+            {{ business?.address || 'Unknown address' }}, {{ business?.postcode || 'Unknown postcode' }}
+          </div>
+
+          <div class="card-footer">
+            <span *ngFor="let star of ratingStars(business?.hygiene_rating)">
+              <img src="images/star.png" style="width: 30px; height: 30px" />
+            </span>
+            Hygiene rating: {{ business?.hygiene_rating ?? 'N/A' }}
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- MAP -->
+      <div class="mt-4 map-wrapper">
+        <div class="text-muted small">
+          Debug coords: {{ marker_position ? (marker_position | json) : 'pending' }}
+        </div>
+        <div #mapContainer class="map-canvas"></div>
+        <div class="text-muted small mt-2">
+          Not all business locations may be accurate and may default to the city centre.
+        </div>
+        <div *ngIf="!marker_position" class="text-muted">
+          Loading map for this business...
+        </div>
+        <div *ngIf="favMessage" class="text-success mt-2">{{ favMessage }}</div>
+      </div>
+
+      <!-- REVIEWS SECTION -->
+      <div class="mt-5">
+        <h3>Reviews</h3>
+
+        <p *ngIf="!reviews.length && !loadingReviews" class="text-muted">
+          No reviews yet. Be the first to review this business.
+        </p>
+        <p *ngIf="loadingReviews" class="text-muted">Loading reviews...</p>
+        <p *ngIf="reviewsError" class="text-danger">{{ reviewsError }}</p>
+        <p *ngIf="!loadingReviews && !reviewsError" class="text-muted small">
+          Loaded {{ reviews.length }} review{{ reviews.length === 1 ? '' : 's' }}.
+        </p>
+
+        <div *ngFor="let review of reviews" class="card mb-3 review-card">
+          <div class="card-body">
+            <h5 class="card-title d-flex justify-content-between align-items-center">
+              <span>
+                <span *ngIf="review.title; else noTitle">{{ review.title }}</span>
+                <ng-template #noTitle>Review</ng-template>
+                <div class="text-muted small">
+                  {{ review.author }} • {{ review.createdAt | date:'mediumDate' }}
+                </div>
+              </span>
+              <span class="review-stars">
+                <span *ngFor="let s of ratingStars(review.rating)">★</span>
+              </span>
+            </h5>
+            <p class="card-text mb-1">{{ review.comment }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD REVIEW FORM -->
+      <div class="mt-4">
+        <h4>Add a review</h4>
+
+        <ng-container *ngIf="auth.isLoggedIn() && !auth.isAdmin(); else loginPrompt">
+          <form [formGroup]="reviewForm" (ngSubmit)="onSubmitReview()">
+            <div class="mb-3">
+              <label class="form-label">Rating</label>
+              <select class="form-select" formControlName="rating">
+                <option [ngValue]="5">5 - Excellent</option>
+                <option [ngValue]="4">4 - Good</option>
+                <option [ngValue]="3">3 - Average</option>
+                <option [ngValue]="2">2 - Poor</option>
+                <option [ngValue]="1">1 - Very poor</option>
+              </select>
+              <div
+                class="text-danger"
+                *ngIf="rating?.touched && rating?.invalid"
+              >
+                Rating must be between 1 and 5.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Title (optional)</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="title"
+                placeholder="e.g. Great lunch spot"
+              />
+              <div class="text-danger" *ngIf="title?.touched && title?.invalid">
+                Title max length is 120 characters.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Comment</label>
+              <textarea
+                class="form-control"
+                rows="3"
+                formControlName="comment"
+              ></textarea>
+              <div
+                class="text-danger"
+                *ngIf="comment?.touched && comment?.invalid"
+              >
+                Comment is required (max 500 characters).
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="reviewForm.invalid || submittingReview"
+            >
+              Submit review
+            </button>
+          </form>
+        </ng-container>
+
+        <ng-template #loginPrompt>
+          <p class="text-muted">
+            <ng-container *ngIf="!auth.isLoggedIn(); else adminNote">
+              Please <a [routerLink]="['/login']">log in</a> to leave a review.
+            </ng-container>
+            <ng-template #adminNote>
+              Admin accounts can view reviews only.
+            </ng-template>
+          </p>
+        </ng-template>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+.filter-row {
+  align-items: center; /* vertically center the columns in the row */
+  row-gap: 0.5rem;
+}
+
+.filter-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.biz-thumb {
+  height: 90px;
+  background: linear-gradient(135deg, #1f4b99, #2288f5);
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
+}
+
+.biz-emoji {
+  font-size: 42px;
+}
+
+.business-card {
+  min-height: 100%;
+}
+
+.business-card .card-footer.footer-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.business-card .stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.star-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.rating-text {
+  font-size: 0.9rem;
+  white-space: nowrap;
+}

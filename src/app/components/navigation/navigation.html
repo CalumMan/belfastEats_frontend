@@ -1,0 +1,57 @@
+<div class="navbar navbar-expand-sm bg-primary navbar-dark fixed-top">
+  <a class="navbar-brand" [routerLink]="['/']" style="cursor:pointer">Belfast Eats</a>
+
+  <!-- Left nav -->
+  <ul class="navbar-nav me-auto">
+    <li class="nav-item">
+      <a class="nav-link" [routerLink]="['/']">Home</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" [routerLink]="['/businesses']">Businesses</a>
+    </li>
+  </ul>
+
+  <!-- Right side auth section -->
+  <ul class="navbar-nav">
+    <!-- Logged OUT -->
+    <ng-container *ngIf="!auth.isLoggedIn()">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/login']">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/register']">Register</a>
+      </li>
+    </ng-container>
+
+    <!-- Logged IN -->
+    <ng-container *ngIf="auth.isLoggedIn()">
+      <li class="nav-item dropdown" (mouseleave)="closeMenu()">
+        <button
+          class="nav-link dropdown-toggle text-white btn btn-link p-0"
+          type="button"
+          (click)="toggleMenu()"
+          aria-expanded="isMenuOpen"
+        >
+          Hello, {{ auth.getCurrentUser()?.username || auth.getCurrentUser()?.email }}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" [class.show]="isMenuOpen">
+          <li *ngIf="!auth.isAdmin()">
+            <a class="dropdown-item" [routerLink]="['/my-reviews']" (click)="closeMenu()">My Reviews</a>
+          </li>
+          <li *ngIf="!auth.isAdmin()">
+            <a class="dropdown-item" [routerLink]="['/favourites']" (click)="closeMenu()">Favourites</a>
+          </li>
+          <li *ngIf="auth.isAdmin()">
+            <a class="dropdown-item" [routerLink]="['/admin/businesses']" (click)="closeMenu()">Admin Panel</a>
+          </li>
+          <li *ngIf="auth.isAdmin()">
+            <a class="dropdown-item" [routerLink]="['/admin/users']" (click)="closeMenu()">Users (debug)</a>
+          </li>
+          <li><hr class="dropdown-divider" /></li>
+          <li><a class="dropdown-item" style="cursor:pointer" (click)="logout()">Logout</a></li>
+        </ul>
+      </li>
+    </ng-container>
+  </ul>
+</div>

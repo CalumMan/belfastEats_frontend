@@ -1,0 +1,45 @@
+<div class="home-hero">
+  <div class="hero-content">
+    <p class="eyebrow">Discover Belfast’s best bites</p>
+    <h1>Belfast Eats</h1>
+    <p class="lede">
+      Browse 600+ restaurants, check hygiene ratings, read reviews, and navigate with live maps.
+      Save favourites and keep your own reviews in one place.
+    </p>
+    <div class="hero-actions">
+      <a class="btn primary" routerLink="/businesses">Explore businesses</a>
+    </div>
+  </div>
+  <div class="hero-card">
+    <div class="stat-pill">
+      <span class="label">Live data</span>
+      <span class="value">603</span>
+      <span class="hint">restaurants</span>
+    </div>
+    <div class="stat-pill">
+      <span class="label">Average rating</span>
+      <span class="value">3.25</span>
+      <span class="hint">user reviews</span>
+    </div>
+    <div class="stat-pill" (click)="goToTopRated()" role="button" tabindex="0">
+      <span class="label">Hygiene focus</span>
+      <span class="value">5★</span>
+      <span class="hint">top picks</span>
+    </div>
+  </div>
+</div>
+
+<div class="home-grid">
+  <div class="info-card">
+    <h3>Plan with confidence</h3>
+    <p>Up-to-date hygiene ratings and addresses help you pick safe spots fast.</p>
+  </div>
+  <div class="info-card">
+    <h3>Maps built-in</h3>
+    <p>Each listing comes with a map and location fallback if coordinates are missing.</p>
+  </div>
+  <div class="info-card">
+    <h3>Favourites & reviews</h3>
+    <p>Save favourites, add reviews, and manage them from your profile.</p>
+  </div>
+</div>
